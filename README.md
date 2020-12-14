@@ -53,3 +53,11 @@ The torrents will be downloaded according to the following priority:
 ## Disclaimer
 
 Downloading copyright movies may be illegal in your country. This tool is for educational purposes only and was created only to experiment with [yify api](https://yts.am/api)
+
+
+First issue I ran into is timeouts. I'm using a VPN so maybe this is why I saw these issues, but the timeout value of 3 seconds was not enough for me. I had issues even with 10 seconds. I upped the timeout to 30 seconds and had no issues. Although, upon a timeout, the error is unhandled.
+
+Second issue is with colons. When downloading a torrent with a colon in the name, os.path.join saw it as a drive letter and threw away the rest of the string. Therefore you would end up with a torrent missing half of its name as well as an extension. I was able to fix this by changing line 66 in "linkdowload.py" from:
+movie = movie.encode('utf-8').decode('utf-8')
+to:
+movie = movie.encode('utf-8').decode('utf-8').replace(':','')
